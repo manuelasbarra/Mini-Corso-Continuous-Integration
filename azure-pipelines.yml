@@ -1,0 +1,37 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+    - src
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+
+# Restore pacchetti
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+# Compilazione
+- task: VSBuild@1
+  displayName: Compilare
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+# Esecuzione dei test
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: 'src/**/*L0*.csproj'
+    workingDirectory: 'src'
