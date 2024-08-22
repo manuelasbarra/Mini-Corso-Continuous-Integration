@@ -12,7 +12,7 @@ public class Calcolatrice
             throw new ArgumentOutOfRangeException(nameof(b));
         }
 
-        return a + b;
+        return a - b;
     }
 
 }
